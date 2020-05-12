@@ -3,9 +3,9 @@ package com.soushetty.grocerylist.model;
 public class GroceryList {
     private int id;
     private String itemname;
-    private int quantity;
+    private String quantity;
     private String color;
-    private int size;
+    private String size;
     private String brand;
     private String date_item_added;
 
@@ -13,7 +13,7 @@ public class GroceryList {
 
     }
 
-    public GroceryList(String itemname, int quantity, String color, int size, String brand, String date_item_added) {
+    public GroceryList(String itemname, String quantity, String color, String size, String brand, String date_item_added) {
         this.itemname = itemname;
         this.quantity = quantity;
         this.color = color;
@@ -22,7 +22,7 @@ public class GroceryList {
         this.date_item_added = date_item_added;
     }
 
-    public GroceryList(int id, String itemname, int quantity, String color, int size, String brand, String date_item_added) {
+    public GroceryList(int id, String itemname, String quantity, String color, String size, String brand, String date_item_added) {
         this.id = id;
         this.itemname = itemname;
         this.quantity = quantity;
@@ -48,11 +48,11 @@ public class GroceryList {
         this.itemname = itemname;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
@@ -64,11 +64,11 @@ public class GroceryList {
         this.color = color;
     }
 
-    public int getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(String size) {
         this.size = size;
     }
 

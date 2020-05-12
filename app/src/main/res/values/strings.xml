@@ -5,15 +5,17 @@
     <string name="title">Enter item</string>
     <string name="hint_title">Item</string>
     <string name="quantity">Quantity</string>
-    <string name="color">Color</string>
+    <string name="color">Col/Fla-vour</string>
     <string name="size">Size</string>
     <string name="brand">Brand</string>
     <string name="droptable">DROP IF EXISTS</string>
-    <string name="itemname">itemname</string>
-    <string name="date">date</string>
-    <string name="confirm">Are you Sure?</string>
+    <string name="itemname">Item</string>
+    <string name="confirm">Delete this item?</string>
     <string name="yes_button_text">YES</string>
     <string name="no_button_text">NO</string>
     <string name="edit_title">Edit items</string>
     <string name="saving_edit">UPDATE</string>
+    <string name="proceed_button_text">Proceed</string>
+    <string name="clear">Clear all,Sure?</string>
+    <string name="cancel_button_text">Cancel</string>
 </resources>

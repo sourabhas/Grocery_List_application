@@ -16,33 +16,36 @@
                 android:id="@+id/confirm_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/confirm"
+                android:text="@string/clear"
                 android:layout_centerHorizontal="true"
-                android:textSize="20dp"
+                android:textSize="18dp"
                 android:textColor="@color/dark_red"
                 android:fontFamily="sans-serif-black"
+                android:textStyle="bold"
                 android:padding="4dp"/>
 
             <Button
-                android:id="@+id/yes_button"
+                android:id="@+id/proceed_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="40dp"
                 android:background="@color/light_red"
-                android:text="@string/yes_button_text"
-                android:textColor="@android:color/white" />
+                android:text="@string/proceed_button_text"
+                android:textColor="@android:color/white"
+                android:textStyle="normal" />
 
             <Button
-                android:id="@+id/no_button"
+                android:id="@+id/cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/yes_button"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:background="@color/light_red"
-                android:text="@string/no_button_text"
-                android:textColor="@android:color/white" />
+                android:text="@string/cancel_button_text"
+                android:layout_below="@+id/proceed_button"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/white"
+                android:textStyle="normal" />
 
 
         </RelativeLayout>

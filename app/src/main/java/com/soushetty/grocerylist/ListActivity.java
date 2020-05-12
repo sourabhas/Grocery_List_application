@@ -9,9 +9,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -38,6 +43,10 @@ public class ListActivity extends AppCompatActivity {
     private EditText itemSize;
     private EditText itemBrand;
     private Button save;
+    private LayoutInflater clear_inflater;
+    private android.app.AlertDialog.Builder builder_clear;
+    private android.app.AlertDialog dialog_clear;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +56,9 @@ public class ListActivity extends AppCompatActivity {
         recyclerView=findViewById(R.id.recyclerview);
         floatingActionButton=findViewById(R.id.fab_button);
         //assigning or defining the declared variables
-        databaseHandler=new DatabaseHandler(this);
+        //databaseHandler=new DatabaseHandler(this);
+        databaseHandler=DatabaseHandler.getInstance(getApplicationContext());
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         groceryLists=new ArrayList<>();
@@ -61,7 +72,11 @@ public class ListActivity extends AppCompatActivity {
         recyclerViewAdapter=new RecyclerViewAdapter(this,groceryLists);
         recyclerView.setAdapter(recyclerViewAdapter);
 
+       //viewHolder=new RecyclerViewAdapter.ViewHolder(recyclerView,this);
         recyclerViewAdapter.notifyDataSetChanged();//to let the adapter know by itself when ever data stored changes
+
+        //viewHolder=new RecyclerViewAdapter.ViewHolder(groceryLists,this);
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +84,128 @@ public class ListActivity extends AppCompatActivity {
             }
         });
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //respond to menu item selection
+
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                shareitems();
+                return true;
+
+            case R.id.action_delete:
+               clearwhole();
+                return true;
+
+                default:
+                    return super.onOptionsItemSelected(item);
+
+        }
+
+    }
+
+    //to clear the whole list of items
+   public void clearwhole() {
+       if(groceryLists.size()<=0){
+           Toast.makeText(ListActivity.this,"Empty List!", Toast.LENGTH_SHORT).show();
+       }else {
+
+           //poping up the confirmation page before deleting
+           builder_clear = new android.app.AlertDialog.Builder(this);
+           clear_inflater = LayoutInflater.from(this);
+           View view = clear_inflater.inflate(R.layout.clearall_confirmation_pop, null);
+
+           Button proceed = view.findViewById(R.id.proceed_button);
+           Button cancel = view.findViewById(R.id.cancel_button);
+
+           builder_clear.setView(view); //passing the object 'view' which has all the details from confirmation_pop.xml
+           dialog_clear = builder_clear.create(); //creating the alert dialog on the screen
+           dialog_clear.show();
+
+
+           proceed.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+
+                   DatabaseHandler db = DatabaseHandler.getInstance(v.getContext());
+                   db.clearitems();
+                   groceryLists.clear();
+                   recyclerViewAdapter.notifyDataSetChanged();
+                   dialog_clear.dismiss();
+
+               }
+           });
+
+           cancel.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   dialog_clear.dismiss();
+
+               }
+           });
+
+       }
+
+
+    }
+
+
+    //when the user clicks SHare button in the menubar, the list of items with its details must be shared
+
+    private void shareitems() {
+        StringBuffer sb=new StringBuffer();
+        if(recyclerViewAdapter.checkeditems.size()<=0){
+            Toast.makeText(ListActivity.this,"Please select the items!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            int i=1;
+
+            for (GroceryList checked : recyclerViewAdapter.checkeditems) {
+                sb.append("\n");
+                sb.append(i+")Item: " +checked.getItemname());
+                sb.append("\n");
+                sb.append("Quantity: " + checked.getQuantity());
+                sb.append("\n");
+                sb.append("Color/flavor: " + checked.getColor() );
+                sb.append("\n");
+                sb.append("Size: "+checked.getSize());
+                sb.append("\n");
+                sb.append("brand: "+checked.getBrand());
+                sb.append("\n");
+                i++;
+            }
+
+
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Items to Buy ");
+            intent.putExtra(Intent.EXTRA_TEXT,sb.toString());
+            startActivity(intent);
+
+            //startActivity(Intent.createChooser(intent, "Share Using:"));
+
+           /* for (GroceryList checked : recyclerViewAdapter.checkeditems) {
+                intent.putExtra(Intent.EXTRA_TEXT, "Name: " + checked.getItemname() + "/n" + "Size: " + checked.getSize()
+                        + "/n" + "Color/flavor: " + checked.getColor() + "/n" + "Quantity: " + checked.getQuantity() + "/n");
+           intent.putExtra(Intent.EXTRA_TEXT,"Color/flavor: "+checked.getColor());
+            intent.putExtra(Intent.EXTRA_TEXT,"Quantity: "+checked.getQuantity());
+            */
+
+
+        }
+
+
+        }
+
+
+
     //to create the same popup screen. on popup.xml  values are entered by user and we need to convert into holadble view objects
     private void createpopdialog() {
         builder=new AlertDialog.Builder(this);
@@ -87,19 +224,13 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //checking that all the items details are filled
-                if(itemName.getText().toString().isEmpty()
-                        || itemQuantity.getText().toString().isEmpty()
-                        || itemColor.getText().toString().isEmpty() ||
-                        itemSize.getText().toString().isEmpty() ||
-                        itemBrand.getText().toString().isEmpty()){
-                    Snackbar.make(v,"Fields can't be empty!!",Snackbar.LENGTH_SHORT).show();
+                if(itemName.getText().toString().isEmpty()){
+                    Snackbar.make(v,"Item name can't be empty!!",Snackbar.LENGTH_SHORT).show();
                 }
                 else {
                     saveItem(v); //calling the method to save the entered data
                 }
             }
-
-
     });
     }
 
@@ -107,9 +238,9 @@ public class ListActivity extends AppCompatActivity {
         GroceryList item=new GroceryList();
         //getting the data from the Ui
         String newitem=itemName.getText().toString().trim();
-        int quantity= Integer.parseInt(itemQuantity.getText().toString().trim());
+        String quantity=(itemQuantity.getText().toString().trim());
         String color=itemColor.getText().toString().trim();
-        int size= Integer.parseInt(itemSize.getText().toString().trim());
+        String size= (itemSize.getText().toString().trim());
         String brand=itemBrand.getText().toString().trim();
         //setting the data retrieved to class variables
         item.setItemname(newitem);
@@ -133,7 +264,7 @@ public class ListActivity extends AppCompatActivity {
                 finish();//killing the previous activity
 
             }
-        },1200); //1 sec
+        },100); //1 sec
 
 
     }

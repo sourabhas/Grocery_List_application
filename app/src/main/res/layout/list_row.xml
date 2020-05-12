@@ -15,7 +15,8 @@
         android:layout_marginEnd="7dp"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="7dp"
-        app:cardCornerRadius="5dp">
+        app:cardBackgroundColor="@color/light_yel"
+        app:cardCornerRadius="10dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -47,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/quantity"
                 android:paddingTop="5dp"
-                android:text="@string/color"
+                android:text="Col/Flav-or"
                 android:textSize="18sp"
                 android:textStyle="italic" />
 
@@ -77,7 +78,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/brand"
                 android:paddingTop="5dp"
-                android:text="@string/date"
                 android:textSize="18sp"
                 android:textStyle="italic" />
 
@@ -93,8 +93,8 @@
 
                 <Button
                     android:id="@+id/edit_button"
-                    android:layout_width="63dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
                     android:width="20dp"
                     android:height="20dp"
@@ -102,14 +102,23 @@
 
                 <Button
                     android:id="@+id/delete_button"
-                    android:layout_width="63dp"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
                     android:width="20dp"
                     android:height="20dp"
-                    android:background="@android:drawable/ic_menu_delete" />
+                    android:background="@android:drawable/ic_delete" />
+
 
 
             </TableRow>
+
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp" />
 
 
         </RelativeLayout>

@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar); //support all versions of android
 
-        databaseHandler=new DatabaseHandler(this);//instantiating the database handler class
+        //databaseHandler=new DatabaseHandler.getInstance(this);//instantiating the database handler class
+        databaseHandler=DatabaseHandler.getInstance(getApplicationContext());
         bypassactivity();
 
         List<GroceryList> lists=databaseHandler.getallitems();
@@ -89,12 +90,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //checking that all the items details are filled
-                if(itemName.getText().toString().isEmpty()
-                        || itemQuantity.getText().toString().isEmpty()
-                        || itemColor.getText().toString().isEmpty() ||
-                        itemSize.getText().toString().isEmpty() ||
-                        itemBrand.getText().toString().isEmpty()){
-                    Snackbar.make(v,"Fields can't be empty!!",Snackbar.LENGTH_SHORT).show();
+                if(itemName.getText().toString().isEmpty())
+                {
+                    Snackbar.make(v,"Name can't be left empty!!",Snackbar.LENGTH_SHORT).show();
                 }
                 else {
                     saveItem(v); //calling the method to save the entered data
@@ -110,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
         GroceryList item=new GroceryList();
         //getting the data from the Ui
         String newitem=itemName.getText().toString().trim();
-        int quantity= Integer.parseInt(itemQuantity.getText().toString().trim());
+        String quantity=(itemQuantity.getText().toString().trim());
         String color=itemColor.getText().toString().trim();
-        int size= Integer.parseInt(itemSize.getText().toString().trim());
+        String size= (itemSize.getText().toString().trim());
         String brand=itemBrand.getText().toString().trim();
         //setting the data retrieved to class variables
         item.setItemname(newitem);
@@ -123,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
         databaseHandler.addItem(item); //passing it to data base
         Snackbar.make(view,"Item added to the list",Snackbar.LENGTH_SHORT).show();
-        Log.d("id_is",""+item.getId());
+        //Log.d("id_is",""+item.getId());
 
         /* to dismiss the popup screen and go to next Activity*/
         // we want to delay something and pass a runnable interface after it.
@@ -137,12 +135,10 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-        },1000); //1 sec=12000
+        },100); //1 sec=12000
 
 
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -159,10 +155,19 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_share) {
+            return true;
+        }else if (id==R.id.action_delete){
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy () {
+        super.onDestroy();
+        //call close() of the helper class
+        databaseHandler.close();
     }
 }

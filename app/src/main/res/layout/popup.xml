@@ -43,7 +43,6 @@
                 android:layout_below="@+id/item_quantity"/>
             <EditText
                 android:id="@+id/item_size"
-                android:inputType="number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/size"

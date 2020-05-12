@@ -19,20 +19,42 @@ import java.util.Date;
 import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private final Context context;
-    public DatabaseHandler(Context context) {
+   // private final Context context;
+    private static DatabaseHandler mInstance = null;
+
+    /* Constructor should be private to prevent direct instantiation.
+      make call to static factory method "getInstance()" instead.*/
+    /*You should not initialize your helper object using with new DatabaseHelper(context).
+Instead, always use DatabaseHelper.getInstance(context), as it guarantees that only one
+ database helper will exist across the entire application's lifecycle--to prevent"A SQLiteConnection object for database was leaked"*/
+
+
+    private DatabaseHandler(Context context) {
         super(context, Util.DATABASE_NAME,null,Util.DATABASE_VERSION);
-        this.context=context;
+        //this.context=context;
     }
+
+    public static DatabaseHandler getInstance(Context ctx) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (mInstance == null) {
+            mInstance = new DatabaseHandler(ctx.getApplicationContext());
+        }
+        return mInstance;
+    }
+
+
 //method to create the sql database table
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE="CREATE TABLE " +Util.TABLE_NAME+ "( "+
                 Util.KEY_ID + " INTEGER PRIMARY KEY," +
                 Util.KEY_NAME + " TEXT," +
-                Util.KEY_QUANTITY + " INTEGER," +
+                Util.KEY_QUANTITY + " TEXT," +
                 Util.KEY_COLOR + " TEXT," +
-                Util.KEY_SIZE + " INTEGER," +
+                Util.KEY_SIZE + " TEXT," +
                 Util.KEY_BRAND + " TEXT," +
                 Util.KEY_DATE + " LONG" + " ) ";
             db.execSQL(CREATE_TABLE);
@@ -83,9 +105,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         GroceryList groceryList=new GroceryList();
         groceryList.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Util.KEY_ID))));
         groceryList.setItemname(cursor.getString(cursor.getColumnIndex(Util.KEY_NAME)));
-        groceryList.setQuantity(Integer.parseInt((cursor.getString(cursor.getColumnIndex(Util.KEY_QUANTITY)))));
+        groceryList.setQuantity(((cursor.getString(cursor.getColumnIndex(Util.KEY_QUANTITY)))));
         groceryList.setColor(cursor.getString(cursor.getColumnIndex(Util.KEY_COLOR)));
-        groceryList.setSize(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Util.KEY_SIZE))));
+        groceryList.setSize((cursor.getString(cursor.getColumnIndex(Util.KEY_SIZE))));
         groceryList.setBrand(cursor.getString(cursor.getColumnIndex(Util.KEY_BRAND)));
 
         //converting TIMESTAMP to something readable
@@ -108,9 +130,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 GroceryList gl=new GroceryList();
                 gl.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Util.KEY_ID))));
                 gl.setItemname(cursor.getString(cursor.getColumnIndex(Util.KEY_NAME)));
-                gl.setQuantity(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Util.KEY_QUANTITY))));
+                gl.setQuantity((cursor.getString(cursor.getColumnIndex(Util.KEY_QUANTITY))));
                 gl.setColor(cursor.getString(cursor.getColumnIndex(Util.KEY_COLOR)));
-                gl.setSize(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Util.KEY_SIZE))));
+                gl.setSize((cursor.getString(cursor.getColumnIndex(Util.KEY_SIZE))));
                 gl.setBrand(cursor.getString(cursor.getColumnIndex(Util.KEY_BRAND)));
 
                 DateFormat dateFormat=DateFormat.getDateInstance();
@@ -154,5 +176,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return cursor.getCount();
 
     }
+
+    public void clearitems(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("delete from "+ Util.TABLE_NAME);
+        db.close();
+
+    }
+
+   /* //Inside your SQLite helper class
+    @Override
+    public synchronized void close () {
+        if ( != null) {
+            db.close();
+            super.close();
+        }
+    }*/
 
 }
