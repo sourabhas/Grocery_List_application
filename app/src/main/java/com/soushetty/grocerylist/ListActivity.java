@@ -9,11 +9,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -71,6 +73,7 @@ public class ListActivity extends AppCompatActivity {
         for (GroceryList items : groceryLists) {
             Log.d("added", "" + items.getItemname());
         }
+
 
         recyclerViewAdapter = new RecyclerViewAdapter(this, groceryLists);
         recyclerView.setAdapter(recyclerViewAdapter);
@@ -278,6 +281,38 @@ public class ListActivity extends AppCompatActivity {
 
 
     }
+
+
+    AbsListView.MultiChoiceModeListener multiChoiceModeListener=new AbsListView.MultiChoiceModeListener() {
+        @Override
+        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater=mode.getMenuInflater();
+            inflater.inflate(R.menu.conceptual_menu,menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+
+        }
+    };
+
+
 
 }
 
