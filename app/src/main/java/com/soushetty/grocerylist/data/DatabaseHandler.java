@@ -59,7 +59,7 @@ Instead, always use DatabaseHelper.getInstance(context), as it guarantees that o
                 Util.KEY_DATE + " LONG" + " ) ";
             db.execSQL(CREATE_TABLE);
     }
-//sqlite query to drop an existing table
+// query to drop an existing table
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String DROP_TABLE=String.valueOf(R.string.droptable); //query to drop table is added as a string resource

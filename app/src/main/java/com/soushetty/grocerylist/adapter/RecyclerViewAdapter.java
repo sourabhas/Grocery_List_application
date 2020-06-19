@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
 import com.soushetty.grocerylist.ItemClickListner;
 import com.soushetty.grocerylist.R;
@@ -56,29 +58,58 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         final GroceryList item = groceryLists.get(position); //object item created
-        holder.itemname.setText(MessageFormat.format("Item: {0}", item.getItemname()));
-        holder.quantity.setText(MessageFormat.format("Quantity: {0}", String.valueOf(item.getQuantity())));
-        holder.color.setText(MessageFormat.format("Color: {0}", item.getColor()));
-        holder.size.setText(MessageFormat.format("Size: {0}", String.valueOf(item.getSize())));
-        holder.brand.setText(MessageFormat.format("Brand: {0}", item.getBrand()));
-        holder.date.setText(MessageFormat.format("Date: {0}", item.getDate_item_added()));
+        holder.itemname.setText(MessageFormat.format("{0}", item.getItemname()));
+        String quant=item.getQuantity();
+     if(quant.isEmpty()) {
+       //  holder.quantity.setText(null);
+         holder.quantity.setVisibility(View.GONE);
+     }else{
+         holder.quantity.setVisibility(View.VISIBLE);
+         holder.quantity.setText(MessageFormat.format("Quantity: {0}",String.valueOf(item.getQuantity())));
+     }
 
-        holder.setItemClickListener(new ItemClickListner() {
-            @Override
-            public void onItemClick(View v, int pos) {
-                CheckBox checkBox = (CheckBox) v;
-                int chkpos = holder.getAdapterPosition();
-                if (checkBox.isChecked()) {
-                    checkeditems.add(groceryLists.get(chkpos));
-                    //checkeditems.add(groceryLists.get(pos));
-                    Log.d("checks", "the selected item is " + groceryLists.get(pos).getItemname());
 
-                } else if (!checkBox.isChecked()) {
-                    checkeditems.remove(groceryLists.get(chkpos));
-                }
+     if(item.getColor().isEmpty()) {
+           holder.color.setVisibility(View.GONE);
+       }
+       else{
+           holder.color.setVisibility(View.VISIBLE);
+           holder.color.setText(MessageFormat.format("Col/Flav-or: {0}", item.getColor()));
+       }
 
-            }
-        });
+      if(item.getSize().isEmpty()) {
+          holder.size.setVisibility(View.GONE);
+        }else{
+          holder.size.setVisibility(View.VISIBLE);
+            holder.size.setText(MessageFormat.format("Size: {0}", String.valueOf(item.getSize())));
+        }
+
+       if(item.getBrand().isEmpty()) {
+           holder.brand.setVisibility(View.GONE);
+       }
+       else{
+           holder.brand.setVisibility(View.VISIBLE);
+           holder.brand.setText(MessageFormat.format("Brand: {0}", item.getBrand()));
+
+       }
+       holder.date.setText(MessageFormat.format("{0}", item.getDate_item_added()));
+       holder.checkBox.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               CheckBox checkBox = (CheckBox) v;
+               int chkpos = holder.getAdapterPosition();
+               if (checkBox.isChecked()) {
+                   checkeditems.add(groceryLists.get(chkpos));
+                   //checkeditems.add(groceryLists.get(pos));
+                   Log.d("checks", "the selected item is " + groceryLists.get(chkpos).getItemname());
+
+               } else if (!checkBox.isChecked()) {
+                   checkeditems.remove(groceryLists.get(chkpos));
+                   Log.d("uncheck", "the unchecked item in Adapter is: "+groceryLists.get(chkpos).getItemname());
+               }
+
+           }
+       });
 
 
     }
@@ -123,6 +154,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             //checkboxes
             checkBox = itemView.findViewById(R.id.checkbox);
             checkBox.setOnClickListener(this);
+
+           /* checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    buttonView.setChecked(false);
+                    notifyDataSetChanged();
+                }
+            });*/
 
         }
 
@@ -236,12 +275,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     DatabaseHandler db = DatabaseHandler.getInstance(context);
                     //getting the items from the updated User end screen
                     selected_item.setItemname(itemName.getText().toString());
+
                     selected_item.setQuantity((itemQuantity.getText().toString()));
+
                     selected_item.setColor(itemColor.getText().toString());
+
                     selected_item.setSize((itemSize.getText().toString()));
+
                     selected_item.setBrand(itemBrand.getText().toString());
 
-                    if (itemName.getText().toString().isEmpty()) {
+                   if (itemName.getText().toString().isEmpty()) {
                         Snackbar.make(v, "Item Name can't be Blank!!", Snackbar.LENGTH_SHORT).show();
 
                     } else {
@@ -258,55 +301,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
     }
-
-
-   /* public void clearallitems() {
-        //poping up the confirmation page before deleting
-        builder = new AlertDialog.Builder(context);
-        inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.confirmation_pop, null);
-
-        Button yesbutton = view.findViewById(R.id.yes_button);
-        Button nobutton = view.findViewById(R.id.no_button);
-
-        builder.setView(view); //passing the object 'view' which has all the details from confirmation_pop.xml
-        dialog = builder.create(); //creating the alert dialog on the screen
-        dialog.show();
-
-        //when user selects YES button -proceed to delete the item
-        yesbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //=new DatabaseHandler(context);
-                DatabaseHandler db = DatabaseHandler.getInstance(context);
-                for (GroceryList checked : checkeditems) {
-                    db.deleteitem(checked.getId());
-                   // groceryLists.remove(getAdapterPosition());     //to remove the correct object from the recycler view
-                    //notifyItemRemoved(getAdapterPosition());
-                    groceryLists.remove(checked.getId());
-                    notifyItemRemoved(checked.getId());
-                }
-                //notifyItemRangeChanged(checked.getId(),groceryLists.size());
-
-                //  RecyclerViewAdapter.this.notify();
-                //to remove the correct object from the recycler view
-                // notifyItemRemoved(checked.getId());
-                // notifyDataSetChanged();
-                // once removed ,we need to notify adapter that the card was removed -by using the helper method
-                dialog.dismiss(); //after deleting in both front end view and backend database we no more need the pop up screen
-
-            }
-
-        });
-
-        //when user selects NO - just return to original screen and nothing needs to changed
-        nobutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss(); //dismissing th confirmation popup
-            }
-        });*/
-
 
 
 }

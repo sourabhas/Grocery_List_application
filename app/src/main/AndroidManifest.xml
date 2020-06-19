@@ -4,9 +4,10 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher1"
+        android:icon="@mipmap/ic_launcher2"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher1_round"
+        android:roundIcon="@mipmap/ic_launcher2_round"
+        android:windowSoftInputMode="stateVisible"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ListActivity"></activity>

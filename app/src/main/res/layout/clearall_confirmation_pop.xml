@@ -39,7 +39,7 @@
                 android:id="@+id/cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/light_red"
                 android:text="@string/cancel_button_text"
                 android:layout_below="@+id/proceed_button"

@@ -39,25 +39,25 @@
                 android:id="@+id/item_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/color"
+                android:hint="Color/Flavor"
                 android:layout_below="@+id/item_quantity"/>
-            <EditText
-                android:id="@+id/item_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/size"
-                android:layout_below="@+id/item_color"/>
             <EditText
                 android:id="@+id/item_brand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/brand"
-                android:layout_below="@+id/item_size"/>
+                android:layout_below="@+id/item_color"/>
+            <EditText
+                android:id="@+id/item_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/size"
+                android:layout_below="@+id/item_brand"/>
             <Button
                 android:id="@+id/save_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/item_brand"
+                android:layout_below="@+id/item_size"
                 android:layout_marginEnd="5dp"
                 android:text="SAVE"
                 android:textSize="18sp"

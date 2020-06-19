@@ -1,5 +1,6 @@
 package com.soushetty.grocerylist;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -76,6 +78,15 @@ public class MainActivity extends AppCompatActivity {
         builder=new AlertDialog.Builder(this);
         View view=getLayoutInflater().inflate(R.layout.popup,null);//creating a view inflating all the data in popup.xml
         itemName=view.findViewById(R.id.item_name);
+       // itemName.setSelection(0);
+       /* itemName.setFocusable(true);
+        itemName.requestFocus();
+        itemName.setFocusableInTouchMode(true);
+        InputMethodManager inputMethodManager= (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(itemName,InputMethodManager.SHOW_IMPLICIT);*/
+        /*_searchText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(_searchText, InputMethodManager.SHOW_IMPLICIT);*/
         itemQuantity=view.findViewById(R.id.item_quantity);
         itemColor=view.findViewById(R.id.item_color);
         itemSize=view.findViewById(R.id.item_size);
@@ -118,6 +129,17 @@ public class MainActivity extends AppCompatActivity {
         item.setColor(color);
         item.setSize(size);
         item.setBrand(brand);
+
+      /*  if(!quantity.isEmpty()){
+        ;}
+
+        if(!color.isEmpty()){
+       }
+
+        if(!size.isEmpty()){
+       }
+        if(!brand.isEmpty()){
+        }*/
 
         databaseHandler.addItem(item); //passing it to data base
         Snackbar.make(view,"Item added to the list",Snackbar.LENGTH_SHORT).show();

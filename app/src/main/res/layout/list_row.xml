@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:id="@+id/linearlayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp">
@@ -15,8 +16,9 @@
         android:layout_marginEnd="7dp"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="7dp"
-        app:cardBackgroundColor="@color/light_yel"
-        app:cardCornerRadius="10dp">
+        app:cardBackgroundColor="@color/light_blue"
+        app:cardCornerRadius="20dp"
+        android:outlineSpotShadowColor="@color/yellow_mild">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -27,9 +29,9 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/itemname"
-                android:fontFamily="sans-serif-black"
-                android:textSize="18sp"
+                android:fontFamily="@font/cherry_swash_bold"
+                android:textColor="@color/dark_red"
+                android:textSize="20dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -39,7 +41,7 @@
                 android:layout_below="@+id/name"
                 android:paddingTop="5dp"
                 android:text="@string/quantity"
-                android:textSize="18sp"
+                android:textSize="18dp"
                 android:textStyle="italic" />
 
             <TextView
@@ -48,48 +50,54 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/quantity"
                 android:paddingTop="5dp"
-                android:text="Col/Flav-or"
-                android:textSize="18sp"
-                android:textStyle="italic" />
-
-            <TextView
-                android:id="@+id/size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/color"
-                android:paddingTop="5dp"
-                android:text="@string/size"
-                android:textSize="18sp"
+                android:text="@string/color"
+                android:textSize="18dp"
                 android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/brand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/size"
+                android:layout_below="@+id/color"
                 android:paddingTop="5dp"
                 android:text="@string/brand"
-                android:textSize="18sp"
+                android:textSize="18dp"
                 android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/brand"
+                android:paddingTop="5dp"
+                android:text="@string/size"
+                android:textSize="18dp"
+                android:textStyle="italic" />
+
 
             <TextView
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/brand"
+                android:layout_below="@+id/size"
                 android:paddingTop="5dp"
-                android:textSize="18sp"
-                android:textStyle="italic" />
+                android:textSize="16dp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/blank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/date"/>
 
             <TableRow
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/date"
+                android:layout_alignBottom="@+id/blank"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginBottom="0dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="4dp">
 
                 <Button
                     android:id="@+id/edit_button"
@@ -110,15 +118,14 @@
                     android:background="@android:drawable/ic_delete" />
 
 
-
             </TableRow>
 
             <CheckBox
                 android:id="@+id/checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp" />
+                android:checked="false"
+                android:layout_alignParentRight="true" />
 
 
         </RelativeLayout>
